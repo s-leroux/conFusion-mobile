@@ -42,19 +42,22 @@ angular.module('conFusion.controllers', [])
 })
 
 
-.controller('MenuController', ['$scope', 'DishDAO', function($scope, DishDAO) {
+.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', function($scope, DishDAO, baseURL) {
+
+  $scope.baseURL = baseURL;
 
   $scope.tab = 1;
   $scope.filtText = '';
   $scope.message = "Loading...";
 
-  $scope.dishes = {};
+  $scope.dishes = [];
   $scope.showMenu = false;
 
   DishDAO.query(null,
     function(data) {
       $scope.dishes = data;
       $scope.showMenu = true;
+      $scope.message = "";
     },
     function(response) {
       $scope.message = "Error: " + response.status + " " + response.statusText;
@@ -106,7 +109,10 @@ angular.module('conFusion.controllers', [])
   $scope.invalidChannelSelection = false;
 }])
 
-.controller('FeedbackController', ['$scope', 'FeedbackDAO', function($scope, FeedbackDAO) {
+.controller('FeedbackController', ['$scope', 'FeedbackDAO', 'baseURL', function($scope, FeedbackDAO, baseURL) {
+
+  $scope.baseURL = baseURL;
+
   $scope.sendFeedback = function() {
     console.log($scope.feedback);
     if ($scope.feedback.agree && ($scope.feedback.mychannel === "")) {
@@ -148,7 +154,7 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', function($scope, DishDAO, $stateParams) {
+.controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', 'baseURL', function($scope, DishDAO, $stateParams, baseURL) {
   $scope.dish = {};
   $scope.showDish = false;
   $scope.message = "Loading...";
@@ -257,8 +263,12 @@ angular.module('conFusion.controllers', [])
 ])
 
 
-.controller('AboutController', ['LeaderDAO', '$scope',
-  function(LeaderDAO, $scope) {
+.controller('AboutController', ['LeaderDAO', '$scope', 'baseURL',
+  function(LeaderDAO, $scope, baseURL) {
+
+  $scope.baseURL = baseURL;
+
+
     $scope.leaders = {};
     $scope.showLeaders = false;
     $scope.message = "Loading...";

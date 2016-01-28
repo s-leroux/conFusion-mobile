@@ -41,16 +41,238 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+
+.controller('MenuController', ['$scope', 'DishDAO', function($scope, DishDAO) {
+
+  $scope.tab = 1;
+  $scope.filtText = '';
+  $scope.message = "Loading...";
+
+  $scope.dishes = {};
+  $scope.showMenu = false;
+
+  DishDAO.query(null,
+    function(data) {
+      $scope.dishes = data;
+      $scope.showMenu = true;
+    },
+    function(response) {
+      $scope.message = "Error: " + response.status + " " + response.statusText;
+    }
+  );
+
+  $scope.select = function(setTab) {
+    $scope.tab = setTab;
+
+    if (setTab === 2) {
+      $scope.filtText = "appetizer";
+    } else if (setTab === 3) {
+      $scope.filtText = "mains";
+    } else if (setTab === 4) {
+      $scope.filtText = "dessert";
+    } else {
+      $scope.filtText = "";
+    }
+  };
+
+  $scope.isSelected = function(checkTab) {
+    return ($scope.tab === checkTab);
+  };
+
+
+  $scope.showDetails = false;
+  $scope.toggleDetails = function() {
+    $scope.showDetails = !$scope.showDetails;
+  };
+
+}])
+
+.controller('ContactController', ['$scope', function($scope) {
+  $scope.feedback = {
+    mychannel: "",
+    firstName: "",
+    lastName: "",
+    agree: false,
+    email: ""
+  };
+  var channels = [{
+    value: "tel",
+    label: "Tel."
+  }, {
+    value: "Email",
+    label: "Email"
+  }];
+  $scope.channels = channels;
+  $scope.invalidChannelSelection = false;
+}])
+
+.controller('FeedbackController', ['$scope', 'FeedbackDAO', function($scope, FeedbackDAO) {
+  $scope.sendFeedback = function() {
+    console.log($scope.feedback);
+    if ($scope.feedback.agree && ($scope.feedback.mychannel === "")) {
+      $scope.invalidChannelSelection = true;
+      console.log('incorrect');
+    } else {
+      // Valid feedback
+
+      /*
+          Save a *new* feedback on the server using a POST request.
+      */
+      FeedbackDAO.save($scope.feedback,
+        function() {
+          $scope.message = "Feedback sent";
+          $scope.sent = true;
+
+          // Reset form (only in case of success)
+          $scope.invalidChannelSelection = false;
+          $scope.feedback = {
+            mychannel: "",
+            firstName: "",
+            lastName: "",
+            agree: false,
+            email: ""
+          };
+          $scope.feedback.mychannel = "";
+
+          $scope.feedbackForm.$setPristine();
+          console.log($scope.feedback);
+        },
+        function(response) {
+          $scope.message = "Error: " + response.status + " " + response.statusText;
+          $scope.sent = false;
+
+        }
+      );
+
+    }
+  };
+}])
+
+.controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', function($scope, DishDAO, $stateParams) {
+  $scope.dish = {};
+  $scope.showDish = false;
+  $scope.message = "Loading...";
+
+  DishDAO.get({
+      id: parseInt($stateParams.id, 10)
+    },
+    function(data) {
+      console.log(data);
+      $scope.dish = data;
+      $scope.showDish = true;
+    },
+    function(response) {
+      $scope.message = "Error: " + response.status + " " + response.statusText;
+    }
+  );
+}])
+
+// ASSIGNMENT 3
+.controller('CommentFormController', function() {
+  /*
+    I didn't use $scope to solve this problem as they will not be supported
+    in Angular 2 according to this discution on the forum:
+
+    https://www.coursera.org/learn/angular-js/module/J5XIt/discussions/YSZJ6p6LEeWGxBJdkUHhbw
+  */
+  this.comment = {
+    comment: "",
+    rating: 5,
+    author: "",
+    date: null
+  };
+
+  this.sendComment = function(dish) {
+    this.comment.date = new Date();
+    dish.comments.push(this.comment);
+    /*
+      push back the changes on the serve using a PUT request.
+    */
+    dish.$update(function() {
+      this.comment = {
+        comment: "",
+        rating: 5,
+        author: "",
+        date: null
+      };
+    });
+  };
+
+  this.reset = function(form) {
+    form.$setPristine();
+  };
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+.controller('IndexController', ['LeaderDAO', 'DishDAO', 'PromotionDAO', 'baseURL', '$scope',
+  function(LeaderDAO, DishDAO, PromotionDAO, baseURL, $scope) {
+
+    $scope.baseURL = baseURL;
+    
+    $scope.featured =
+      $scope.promotion =
+      $scope.ec = {};
+    $scope.showLeaders =
+      $scope.showPromotion =
+      $scope.showEC = false;
+    $scope.messageFeatured =
+      $scope.messagePromition =
+      $scope.messageEC = "Loading...";
+
+    DishDAO.get({
+        id: 0
+      },
+      function(data) {
+        $scope.featured = data;
+        $scope.showFeatured = true;
+      },
+      function(response) {
+        $scope.messageFeatured = "Error: " + response.status + " " + response.statusText;
+      }
+    );
+    PromotionDAO.getPromotion({
+        id: 0
+      },
+      function(data) {
+        $scope.promotion = data;
+        $scope.showPromotion = true;
+      },
+      function(response) {
+        $scope.messagePromotion = "Error: " + response.status + " " + response.statusText;
+      }
+    );
+    LeaderDAO.getByRole({
+        role: 'EC'
+      },
+      function(data) {
+        // As I query by an attribute (abbr) instead
+        // of by id, the response is an array
+        $scope.ec = data[0];
+        $scope.showEC = true;
+      },
+      function(response) {
+        $scope.messageEC = "Error: " + response.status + " " + response.statusText;
+      }
+    );
+  }
+])
+
+
+.controller('AboutController', ['LeaderDAO', '$scope',
+  function(LeaderDAO, $scope) {
+    $scope.leaders = {};
+    $scope.showLeaders = false;
+    $scope.message = "Loading...";
+
+    LeaderDAO.query(null,
+      function(data) {
+        $scope.leaders = data;
+        $scope.showLeaders = true;
+      },
+      function(response) {
+        $scope.message = "Error: " + response.status + " " + response.statusText;
+      }
+    );
+  }
+])
+
+;

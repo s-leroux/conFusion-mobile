@@ -36,7 +36,7 @@ angular.module('conFusion.services',['ngResource'])
                 //
                 // https://www.coursera.org/learn/angular-js/module/tJ7jz/discussions/VCtNNac0EeWhLRIkesxXNw
                 method: 'PUT', params: { id: '@id' }
-            }
+            },
         });
     }])
 

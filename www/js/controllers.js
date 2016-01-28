@@ -46,12 +46,18 @@ angular.module('conFusion.controllers', [])
 
   $scope.baseURL = baseURL;
 
-  $scope.tab = 1;
+  $scope.tab = 0;
   $scope.filtText = '';
   $scope.message = "Loading...";
 
   $scope.dishes = [];
   $scope.showMenu = false;
+  $scope.categories = [
+    {id: 0, name:"All", filtText:""},
+    {id: 2, name:"Appetizers", filtText: "appetizer"},
+    {id: 3, name:"Mains", filtText: "mains"},
+    {id: 4, name:"Dessert", filtText: "dessert"},
+  ];
 
   DishDAO.query(null,
     function(data) {
@@ -67,12 +73,9 @@ angular.module('conFusion.controllers', [])
   $scope.select = function(setTab) {
     $scope.tab = setTab;
 
-    if (setTab === 2) {
-      $scope.filtText = "appetizer";
-    } else if (setTab === 3) {
-      $scope.filtText = "mains";
-    } else if (setTab === 4) {
-      $scope.filtText = "dessert";
+    var sel = $scope.categories.find(function(item) { return item.id == setTab});
+    if (sel) {
+      $scope.filtText = sel.filtText;
     } else {
       $scope.filtText = "";
     }

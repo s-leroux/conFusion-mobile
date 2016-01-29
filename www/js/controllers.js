@@ -158,6 +158,9 @@ angular.module('conFusion.controllers', [])
 }])
 
 .controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', 'baseURL', function($scope, DishDAO, $stateParams, baseURL) {
+
+  $scope.baseURL = baseURL;
+
   $scope.dish = {};
   $scope.showDish = false;
   $scope.message = "Loading...";

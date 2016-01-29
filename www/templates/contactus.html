@@ -1,5 +1,40 @@
 <ion-view view-title="Contact Us">
-  <ion-content>
-    <h1>contact Us</h1>
-  </ion-content>
+<ion-content>
+<div class="card">
+  <h2 class="item item-divider">
+  Location Information
+  </h2>
+  <div class="item item-text-wrap">
+    <h3>Our Address</h3>
+    <address style="font-size: 100%">
+      121, Clear Water Bay Road<br>
+      Clear Water Bay, Kowloon<br>
+      HONG KONG<br>
+      <!--
+          See http://stackoverflow.com/a/35089607/2363712
+
+          Feel free to comment there on this usage of WAI-ARIA for icons.
+      -->
+      <span aria-label="Phone number">
+        <span class="icon ion-android-call" aria-hidden="true"></span>&nbsp;: +852 1234 5678
+      </span><br>
+      <span aria-label="Fax number">
+        <span class="icon ion-android-print" aria-hidden="true"></span>&nbsp;: +852 8765 4321
+      </span><br>
+      <span aria-label="Email">
+        <span class="icon ion-android-mail" aria-hidden="true"></span>&nbsp;:
+        <a href="mailto:confusion@food.net">confusion@food.net</a>
+      </span>
+    </address>
+  </div>
+  <div class="button-bar">
+    <a class="button button-positive" 
+       href="tel:+852 1234 5678"><span class="icon ion-android-call"></span>&nbsp;Call</a>
+    <a class="button button-calm"
+       href="skype:confusion?call"><span class="icon ion-social-skype"></span>&nbsp;Skype</a>
+    <a class="button button-balanced"
+       href="mailto:confusion@food.netx"><span class="icon ion-android-mail"></span>&nbsp;Email</a>
+  </div>
+</div>
+</ion-content>
 </ion-view>

@@ -16,10 +16,10 @@
                     href="#/app/menu/{{dish.id}}"
                     class="item-thumbnail-left">
 
-        <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
+        <img src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
         <span class="badge badge-assertive">{{dish.label}}</span>
         <h2>{{dish.name}}
-        <span style="font-size:75%">{{dish.price | currency}}</span>
+        <span style="font-size:75%">{{dish.price | currency}}</span></h2>
         <p>{{dish.description}}</p>
       </ion-item>
     </ion-list>

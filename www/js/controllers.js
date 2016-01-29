@@ -39,6 +39,10 @@ angular.module('conFusion.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+
+  $scope.urlResolver = function(url) {
+    return 'http://localhost:3000/' + url
+  }
 })
 
 
@@ -272,7 +276,7 @@ angular.module('conFusion.controllers', [])
 .controller('AboutController', ['LeaderDAO', '$scope', 'baseURL',
   function(LeaderDAO, $scope, baseURL) {
 
-  $scope.baseURL = baseURL;
+    $scope.baseURL = baseURL;
 
 
     $scope.leaders = {};
@@ -283,6 +287,7 @@ angular.module('conFusion.controllers', [])
       function(data) {
         $scope.leaders = data;
         $scope.showLeaders = true;
+        $scope.message = "";
       },
       function(response) {
         $scope.message = "Error: " + response.status + " " + response.statusText;

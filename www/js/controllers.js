@@ -40,6 +40,29 @@ angular.module('conFusion.controllers', [])
     }, 1000);
   };
 
+  // Create the reserve modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/reserve.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.reserveModal = modal;
+  });
+
+  // Open the reserve modal
+  $scope.reserve = function() {
+    $scope.reserveModal.show();
+  };
+
+  // Perform the reserve action when the user submits the login form
+  $scope.doReserve = function() {
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
+  };
+
+  $scope.reservation = {
+    numGuests: 0,
+  };
+
   $scope.urlResolver = function(url) {
     return 'http://localhost:3000/' + url
   }

@@ -75,8 +75,8 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', 'favorite', '$ionicListDelegate',
-                               function($scope, DishDAO, baseURL, favorite, $ionicListDelegate) {
+.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup',
+                               function($scope, DishDAO, baseURL, favorite, $ionicListDelegate, $ionicPopup) {
 
   $scope.baseURL = baseURL;
 
@@ -131,7 +131,16 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.removeFavorite = function(id) {
-    favorite.remove(id);
+    var confirmPopup = $ionicPopup.confirm({
+      title: "Confirm Delete",
+      template: "Are you sure you want to delete this item from your favorites ?",
+    });
+
+    confirmPopup.then(function(res) {
+      if (res) {
+        favorite.remove(id);
+      }
+    });
     $ionicListDelegate.closeOptionButtons();
   };
 

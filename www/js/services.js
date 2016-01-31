@@ -74,7 +74,7 @@ angular.module('conFusion.services',['ngResource'])
     }])
 
 
-    .factory('favorite', [function() {
+    .factory('favorite', ['$resource', 'baseURL', function($resource, baseURL) {
         var favorites = [];
         var favorite = {
             contains: function(id) {

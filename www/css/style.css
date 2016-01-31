@@ -1,6 +1,20 @@
-/* Empty. Add your own CSS if you like */
-/*ion-content {  overflow-y: hidden !important;}*/
 
 .tab-item a {
   color:inherit;
 }
+
+.popover {
+  height: auto !important;
+}
+.popover ion-header-bar {
+  position: relative;
+}
+.popover ion-content {
+  top: 0;
+  position: relative;
+}
+.popover-inner-content {
+  width: 100%;
+  padding: 5px 20px;
+}
+

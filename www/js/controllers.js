@@ -52,8 +52,15 @@ angular.module('conFusion.controllers', [])
     $scope.reserveModal.show();
   };
 
+  // Triggered in the reserve modal to close it
+  $scope.closeReserve = function() {
+    $scope.reserveModal.hide();
+  };
+
   // Perform the reserve action when the user submits the login form
   $scope.doReserve = function() {
+    console.log("Doing reservation", $scope.reservation);
+    
     $timeout(function() {
       $scope.closeLogin();
     }, 1000);

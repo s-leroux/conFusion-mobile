@@ -75,8 +75,8 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup',
-                               function($scope, DishDAO, baseURL, favorite, $ionicListDelegate, $ionicPopup) {
+.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
+                               function($scope, DishDAO, baseURL, favorite, $ionicListDelegate, $ionicPopup, $ionicLoading) {
 
   $scope.baseURL = baseURL;
 
@@ -93,14 +93,20 @@ angular.module('conFusion.controllers', [])
     {id: 4, name:"Dessert", filtText: "dessert"},
   ];
 
+  $ionicLoading.show({
+    template: "<ion-spinner></ion-spinner> Loading...",
+  });
+
   DishDAO.query(null,
     function(data) {
       $scope.dishes = data;
       $scope.showMenu = true;
       $scope.message = "";
+      $ionicLoading.hide();
     },
     function(response) {
       $scope.message = "Error: " + response.status + " " + response.statusText;
+      $ionicLoading.hide();
     }
   );
 

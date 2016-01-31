@@ -75,20 +75,26 @@ angular.module('conFusion.services',['ngResource'])
 
 
     .factory('favorite', ['$resource', 'baseURL', function($resource, baseURL) {
-        var favorites = [];
+        var favorites = Object.create(null);
+        // Better using Object.create(null) above rather than {}
+        // to ensure there is no properties in the prototype chain that
+        // would confuse the `in`  operator
+        //
+        // See http://stackoverflow.com/questions/15518328/creating-js-object-with-object-createnull
+        // and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
+
         var favorite = {
             contains: function(id) {
-                return favorites.find(function(value) { return value == id; }) !== undefined;
+                return id in favorites;
             },
             add: function(id) {
-                this.remove(id);
-                favorites.push(id);
+                favorites[id] = true;
             },
             remove: function(id) {
-                favorites = favorites.filter(function(value) { return value != id; });
+                delete favorites[id];
             },
             filter: function(ids) {
-                return ids.filter(function(dish) { return favorites.indexOf(dish.id) != -1; });
+                return ids.filter(function(dish) { return dish.id in favorites; });
             }
         };
 

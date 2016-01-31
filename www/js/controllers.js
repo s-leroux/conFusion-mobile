@@ -75,8 +75,8 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-
-.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', function($scope, DishDAO, baseURL) {
+.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', 'favorite', '$ionicListDelegate',
+                               function($scope, DishDAO, baseURL, favorite, $ionicListDelegate) {
 
   $scope.baseURL = baseURL;
 
@@ -123,6 +123,20 @@ angular.module('conFusion.controllers', [])
   $scope.showDetails = false;
   $scope.toggleDetails = function() {
     $scope.showDetails = !$scope.showDetails;
+  };
+
+  $scope.addFavorite = function(id) {
+    favorite.add(id);
+    $ionicListDelegate.closeOptionButtons();
+  };
+
+  $scope.removeFavorite = function(id) {
+    favorite.remove(id);
+    $ionicListDelegate.closeOptionButtons();
+  };
+
+  $scope.isFavorite = function(id) {
+    return favorite.contains(id);
   };
 
 }])

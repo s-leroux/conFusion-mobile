@@ -17,10 +17,22 @@
                     class="item-thumbnail-left">
 
         <img src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
-        <span class="badge badge-assertive">{{dish.label}}</span>
-        <h2>{{dish.name}}
+        <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
+          <span class="ion-ios-star icon" aria-label="favorite">
+          </span>
+        </span>
+        <span class="badge badge-assertive" ng-if="!isFavorite(dish.id)">{{dish.label}}</span>
+        <h2><br>{{dish.name}}
         <span style="font-size:75%">{{dish.price | currency}}</span></h2>
         <p>{{dish.description}}</p>
+        <ion-option-button class="button-assertive icon ion-plus-circled"
+                      ng-click="addFavorite(dish.id)"
+                      ng-if="!isFavorite(dish.id)">
+        </ion-option-button>
+        <ion-option-button class="button-assertive icon ion-minus-circled"
+                      ng-click="removeFavorite(dish.id)"
+                      ng-if="isFavorite(dish.id)">
+        </ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>

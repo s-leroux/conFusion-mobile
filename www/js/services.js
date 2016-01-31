@@ -74,4 +74,25 @@ angular.module('conFusion.services',['ngResource'])
     }])
 
 
+    .factory('favorite', [function() {
+        var favorites = [];
+        var favorite = {
+            contains: function(id) {
+                return favorites.find(function(value) { return value == id; }) !== undefined;
+            },
+            add: function(id) {
+                this.remove(id);
+                favorites.push(id);
+            },
+            remove: function(id) {
+                favorites = favorites.filter(function(value) { return value != id; });
+            },
+            filter: function(ids) {
+                return ids.filter(function(value) { return favorites.indexOf(value) != -1; });
+            }
+        };
+
+        return favorite;
+    }])
+
 ;

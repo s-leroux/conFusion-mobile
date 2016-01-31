@@ -141,6 +141,21 @@ angular.module('conFusion.controllers', [])
 
 }])
 
+.controller('FavoritesController', ['$scope', '$controller', function($scope, $controller) {
+  // In my implementation, a FavoriteController is just a specialized version of the
+  // MenuController. I will simply extend it here to avoid code duplication.
+  //
+  // See http://stackoverflow.com/questions/16539999/angular-extending-controller (look into comments)
+  // and https://docs.angularjs.org/api/ng/service/$controller
+  $controller('MenuController', {$scope: $scope});
+
+  $scope.shouldShowDelete = false;
+  $scope.toggleDelete = function() {
+    $scope.shouldShowDelete = !$scope.shouldShowDelete;
+    console.log(shouldShowDelete);
+  };
+}])
+
 .controller('ContactController', ['$scope', function($scope) {
   $scope.feedback = {
     mychannel: "",

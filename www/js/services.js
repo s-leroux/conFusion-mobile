@@ -88,11 +88,17 @@ angular.module('conFusion.services',['ngResource'])
                 favorites = favorites.filter(function(value) { return value != id; });
             },
             filter: function(ids) {
-                return ids.filter(function(value) { return favorites.indexOf(value) != -1; });
+                return ids.filter(function(dish) { return favorites.indexOf(dish.id) != -1; });
             }
         };
 
         return favorite;
+    }])
+
+    .filter('favoriteFilter', ['favorite', function(favorite) {
+        return function(dishes) {
+            return favorite.filter(dishes);
+        };
     }])
 
 ;

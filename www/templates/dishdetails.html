@@ -1,4 +1,11 @@
 <ion-view view-title="Dish Details">
+<ion-nav-buttons side="secondary">
+  <div class="buttons">
+    <button class="button button-icon icon ion-more"
+            ng-click="openPopover($event)"></button>
+  </div>
+</ion-nav-buttons>
+
 <ion-content>
 
 <div class="card">
@@ -8,7 +15,11 @@
              class="full-image">
         <h2>{{dish.name}}
         <span class="font-size:75%">{{dish.price | currency}}</span>
-        <span class="badge badge-assertive">{{dish.label}}</span>
+        <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
+          <span class="ion-ios-star icon" aria-label="favorite">
+          </span>
+        </span>
+        <span class="badge badge-assertive" ng-if="!isFavorite(dish.id)">{{dish.label}}</span>
         </h2>
         <p>{{dish.description}}</p>
     </div>

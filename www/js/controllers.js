@@ -235,13 +235,60 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', 'baseURL', function($scope, DishDAO, $stateParams, baseURL) {
+.controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', 'baseURL', 'favorite', 
+                                      '$ionicPopover', '$ionicPopup',
+                                     function($scope, DishDAO, $stateParams, baseURL, favorite, 
+                                       $ionicPopover, $ionicPopup) {
 
   $scope.baseURL = baseURL;
 
   $scope.dish = {};
   $scope.showDish = false;
   $scope.message = "Loading...";
+
+  $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+    scope: $scope
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+
+  $scope.addFavorite = function(id) {
+    $scope.popover.hide().then(function() { 
+      // wait till the end of the animation
+      // before adding to the favorite to avoid
+      // the menu "remove from favorites" to appear then
+      favorite.add(id); 
+    });
+  };
+
+  $scope.removeFavorite = function(id) {
+    $scope.closePopover();
+
+    var confirmPopup = $ionicPopup.confirm({
+      title: "Confirm Delete",
+      template: "Are you sure you want to delete this item from your favorites ?",
+    });
+
+    confirmPopup.then(function(res) {
+      if (res) {
+        favorite.remove(id);
+      }
+    });
+    $ionicListDelegate.closeOptionButtons();
+  };
+
+  $scope.isFavorite = function(id) {
+    return favorite.contains(id);
+  };
+
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };
+
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
 
   DishDAO.get({
       id: parseInt($stateParams.id, 10)

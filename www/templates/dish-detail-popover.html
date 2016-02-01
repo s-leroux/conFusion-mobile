@@ -1,0 +1,14 @@
+  <ion-popover-view>
+    <ion-content>
+      <ion-list>
+        <ion-item href="#" 
+                  ng-click="addFavorite(dish.id)"
+                  ng-if="!isFavorite(dish.id)">Add to Favorites</ion-item>
+        <ion-item href="#" 
+                  ng-click="removeFavorite(dish.id)"
+                  ng-if="isFavorite(dish.id)">Remove from Favorites</ion-item>
+        <ion-item href="#"
+                  ng-click="">Add a Comment</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-popover-view>

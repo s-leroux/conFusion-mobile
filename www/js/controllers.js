@@ -75,8 +75,8 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$scope', 'DishDAO', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
-                               function($scope, DishDAO, baseURL, favorite, $ionicListDelegate, $ionicPopup, $ionicLoading) {
+.controller('MenuController', ['$scope', 'dishes', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
+                               function($scope, dishes, baseURL, favorite, $ionicListDelegate, $ionicPopup, $ionicLoading) {
 
   $scope.baseURL = baseURL;
 
@@ -93,11 +93,12 @@ angular.module('conFusion.controllers', [])
     {id: 4, name:"Dessert", filtText: "dessert"},
   ];
 
+  /*
   $ionicLoading.show({
     template: "<ion-spinner></ion-spinner> Loading...",
   });
 
-  DishDAO.query(null,
+  $scope.dishes = DishDAO.query(null,
     function(data) {
       $scope.dishes = data;
       $scope.showMenu = true;
@@ -109,6 +110,9 @@ angular.module('conFusion.controllers', [])
       $ionicLoading.hide();
     }
   );
+  */
+
+  $scope.dishes = dishes;
 
   $scope.select = function(setTab) {
     $scope.tab = setTab;
@@ -156,13 +160,16 @@ angular.module('conFusion.controllers', [])
 
 }])
 
-.controller('FavoritesController', ['$scope', '$controller', function($scope, $controller) {
+.controller('FavoritesController', ['$scope', '$controller', 'dishes', function($scope, $controller, dishes) {
   // In my implementation, a FavoriteController is just a specialized version of the
   // MenuController. I will simply extend it here to avoid code duplication.
   //
   // See http://stackoverflow.com/questions/16539999/angular-extending-controller (look into comments)
   // and https://docs.angularjs.org/api/ng/service/$controller
-  $controller('MenuController', {$scope: $scope});
+  $controller('MenuController', {
+    $scope: $scope,
+    dishes: dishes,
+  });
 
   $scope.shouldShowDelete = false;
   $scope.toggleDelete = function() {
@@ -235,14 +242,14 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', 'baseURL', 'favorite', 
+.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favorite', 
                                       '$ionicPopover', '$ionicPopup', '$ionicModal',
-                                     function($scope, DishDAO, $stateParams, baseURL, favorite, 
+                                     function($scope, dish, $stateParams, baseURL, favorite, 
                                        $ionicPopover, $ionicPopup, $ionicModal) {
 
   $scope.baseURL = baseURL;
 
-  $scope.dish = {};
+  $scope.dish = dish;
   $scope.showDish = false;
   $scope.message = "Loading...";
 
@@ -342,7 +349,8 @@ angular.module('conFusion.controllers', [])
     return favorite.contains(id);
   };
 
-  DishDAO.get({
+  /*
+  $scope.dish = DishDAO.get({
       id: parseInt($stateParams.id, 10)
     },
     function(data) {
@@ -354,6 +362,7 @@ angular.module('conFusion.controllers', [])
       $scope.message = "Error: " + response.status + " " + response.statusText;
     }
   );
+  */
 }])
 
 // ASSIGNMENT 3
@@ -407,7 +416,7 @@ angular.module('conFusion.controllers', [])
       $scope.messagePromition =
       $scope.messageEC = "Loading...";
 
-    DishDAO.get({
+    $scope.featured = DishDAO.get({
         id: 0
       },
       function(data) {
@@ -418,7 +427,7 @@ angular.module('conFusion.controllers', [])
         $scope.messageFeatured = "Error: " + response.status + " " + response.statusText;
       }
     );
-    PromotionDAO.getPromotion({
+    $scope.promotion = PromotionDAO.getPromotion({
         id: 0
       },
       function(data) {
@@ -429,7 +438,7 @@ angular.module('conFusion.controllers', [])
         $scope.messagePromotion = "Error: " + response.status + " " + response.statusText;
       }
     );
-    LeaderDAO.getByRole({
+    $scope.ec = LeaderDAO.getByRole({
         role: 'EC'
       },
       function(data) {
@@ -456,7 +465,7 @@ angular.module('conFusion.controllers', [])
     $scope.showLeaders = false;
     $scope.message = "Loading...";
 
-    LeaderDAO.query(null,
+    $scope.leaders = LeaderDAO.query(null,
       function(data) {
         $scope.leaders = data;
         $scope.showLeaders = true;

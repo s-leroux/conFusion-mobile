@@ -67,7 +67,12 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
       views: {
         'mainContent': {
           templateUrl: 'templates/menu.html',
-          controller: 'MenuController'
+          controller: 'MenuController',
+          resolve: {
+            dishes: ['DishDAO', function(DishDAO) {
+              return DishDAO.query();
+            }],
+          }
         }
       }
     })
@@ -77,7 +82,13 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
       views: {
         'mainContent': {
           templateUrl: 'templates/favorites.html',
-          controller: 'FavoritesController'
+          controller: 'FavoritesController',
+          resolve: {
+            dishes: ['DishDAO', function(DishDAO) {
+              return DishDAO.query();
+            }],
+            // XXX Should do the same for favorites
+          },
         }
       }
     })
@@ -87,7 +98,12 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
     views: {
       'mainContent': {
         templateUrl: 'templates/dishdetails.html',
-        controller: 'DishDetailController'
+        controller: 'DishDetailController',
+        resolve: {
+          dish: ['DishDAO', '$stateParams', function(DishDAO, $stateParams) {
+            return DishDAO.get({id:parseInt($stateParams.id, 10)});
+          }],
+        }
       }
     }
   });

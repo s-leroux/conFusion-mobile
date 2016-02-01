@@ -236,9 +236,9 @@ angular.module('conFusion.controllers', [])
 }])
 
 .controller('DishDetailController', ['$scope', 'DishDAO', '$stateParams', 'baseURL', 'favorite', 
-                                      '$ionicPopover', '$ionicPopup',
+                                      '$ionicPopover', '$ionicPopup', '$ionicModal',
                                      function($scope, DishDAO, $stateParams, baseURL, favorite, 
-                                       $ionicPopover, $ionicPopup) {
+                                       $ionicPopover, $ionicPopup, $ionicModal) {
 
   $scope.baseURL = baseURL;
 
@@ -252,6 +252,64 @@ angular.module('conFusion.controllers', [])
     $scope.popover = popover;
   });
 
+  $scope.openPopover = function($event) {
+    $scope.popover.show($event);
+  };
+
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+
+  $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.commentModal = modal;
+  });
+
+  // Triggered in the comment modal to close it
+  $scope.closeComment = function() {
+    $scope.commentModal.hide();
+  };
+
+  $scope.commentData = {
+    rating : 5,
+    author: "",
+    comment: "",
+    date: null,
+  };
+
+  // Close the popover and open the comment modal
+  $scope.comment = function() {
+    $scope.popover.hide();
+    if (!$scope.commentData.comment && $scope.isFavorite($scope.dish.id)) {
+      $scope.commentData.comment = "One of my favorites !";
+    }
+    $scope.commentModal.show();
+  };
+
+  // Send the comment
+  $scope.doComment = function() {
+    $scope.commentModal.hide();
+
+    $scope.dish.comments.push({
+      rating: $scope.commentData.rating,
+      author: $scope.commentData.author,
+      comment: $scope.commentData.comment,
+      date: new Date(),
+    });
+
+    /*
+      push back the changes on the serve using a PUT request.
+    */
+    $scope.dish.$update(function() {
+      // Reset the form
+      $scope.commentData.rating = 5;
+      $scope.commentData.comment = "";
+      $scope.commentData.date = null;
+
+      $scope.commentForm.reset();
+    });
+  };
 
   $scope.addFavorite = function(id) {
     $scope.popover.hide().then(function() { 
@@ -280,14 +338,6 @@ angular.module('conFusion.controllers', [])
 
   $scope.isFavorite = function(id) {
     return favorite.contains(id);
-  };
-
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };
-
-  $scope.closePopover = function() {
-    $scope.popover.hide();
   };
 
   DishDAO.get({

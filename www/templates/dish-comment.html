@@ -1,0 +1,53 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">My Comment</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeComment()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list card">
+      <!-- Reminder of the dish we are commenting -->
+      <div class="item item-thumbnail-left">
+        <img src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
+        <h2><br>{{dish.name}}
+        <span style="font-size:75%">{{dish.price | currency}}</span>
+        <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
+          <span class="ion-ios-star icon" aria-label="favorite">
+          </span>
+        </span>
+        <span class="badge badge-assertive" ng-if="!isFavorite(dish.id)">{{dish.label}}</span>
+        </h2>
+        <p>{{dish.description}}</p>
+      </div>
+    </div>
+
+
+    <!-- The form per se -->
+    <form ng-submit="doComment()" name="commentForm">
+      <div class="list">
+        <div class="item item-input">
+          <a ng-repeat="n in [1,2,3,4,5]"
+                ng-class="'ion-ios-star'+((commentData.rating>=n) ? '' : '-outline')" 
+                class="icon button button-icon"
+                ng-click="commentData.rating = n"></a>
+        </div>
+        <label class="item item-input">
+          <input placeholder="Your name" type="text" 
+                ng-model="commentData.author"
+                required ng-minlength="5">
+        </label>
+        <label class="item item-input">
+          <textarea placeholder="Your Comment" 
+                ng-model="commentData.comment"
+                required ng-minlength="5"></textarea>
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" 
+                  type="submit"
+                  ng-disabled="commentForm.$invalid">Send</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

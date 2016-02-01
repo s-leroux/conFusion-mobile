@@ -6,6 +6,7 @@
     </div>
   </ion-header-bar>
   <ion-content>
+    <dic class="row">
     <div class="list card">
       <!-- Reminder of the dish we are commenting -->
       <div class="item item-thumbnail-left">
@@ -21,10 +22,11 @@
         <p>{{dish.description}}</p>
       </div>
     </div>
+    </dic>
 
-
+    <div class="row">
     <!-- The form per se -->
-    <form ng-submit="doComment()" name="commentForm">
+    <form ng-submit="doComment()" name="commentForm" class="col">
       <div class="list">
         <div class="item item-input">
           <a ng-repeat="n in [1,2,3,4,5]"
@@ -35,12 +37,15 @@
         <label class="item item-input">
           <input placeholder="Your name" type="text" 
                 ng-model="commentData.author"
-                required ng-minlength="5">
+                required ng-minlength="5"
+                class="col col-90"><!-- "col col-90" required to properly display field outline on Firefox -->
         </label>
         <label class="item item-input">
           <textarea placeholder="Your Comment" 
                 ng-model="commentData.comment"
-                required ng-minlength="5"></textarea>
+                required ng-minlength="5"
+                class="col col-90"></textarea>
+                <!-- "col col-90" required to properly display field outline on Firefox -->
         </label>
         <label class="item">
           <button class="button button-block button-positive" 
@@ -49,5 +54,6 @@
         </label>
       </div>
     </form>
+    </div>
   </ion-content>
 </ion-modal-view>

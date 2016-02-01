@@ -281,6 +281,8 @@ angular.module('conFusion.controllers', [])
   // Close the popover and open the comment modal
   $scope.comment = function() {
     $scope.popover.hide();
+
+    // Default message for favorite dishes
     if (!$scope.commentData.comment && $scope.isFavorite($scope.dish.id)) {
       $scope.commentData.comment = "One of my favorites !";
     }

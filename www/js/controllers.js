@@ -81,13 +81,11 @@ angular.module('conFusion.controllers', [])
   console.log('Start of MenuController');
   console.log(dishes);
 
-
-
-
-
   if (!dishes.$resolved) {
     $rootScope.$broadcast('loading:show');
     dishes.$promise.then(function(data) {
+      $rootScope.$broadcast('loading:hide');
+    },function(err) {
       $rootScope.$broadcast('loading:hide');
     });
   };

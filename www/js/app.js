@@ -95,6 +95,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         'mainContent': {
           templateUrl: 'templates/menu.html',
           controller: 'MenuController',
+          // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/EpxPAsjzEeWs-BKzmUStyw/replies/ppf9u8mFEeWUXxL-L9OQmQ/comments/HCzntcmwEeW7ZQq25xfj8w
+          // for why dishes resolver has been moved up to the "app" state
         }
       }
     })
@@ -105,7 +107,17 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         'mainContent': {
           templateUrl: 'templates/favorites.html',
           controller: 'FavoritesController',
-            // XXX Should do the same for favorites
+          resolve: {
+            // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/EpxPAsjzEeWs-BKzmUStyw/replies/ppf9u8mFEeWUXxL-L9OQmQ/comments/HCzntcmwEeW7ZQq25xfj8w
+            // for why dishes resolver has been moved up to the "app" state
+
+            /*
+                ONLY to comply with the suggested solution in the course
+            */
+            favorites: ['favorites', function(favorites) {
+              return favorites.getFavorites();
+            }],
+          },
         },
       }
     })

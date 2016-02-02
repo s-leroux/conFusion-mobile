@@ -83,7 +83,7 @@ angular.module('conFusion.services',['ngResource'])
         // See http://stackoverflow.com/questions/15518328/creating-js-object-with-object-createnull
         // and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
 
-        var favorites = {
+        var provider = {
             contains: function(id) {
                 return id in favorites;
             },
@@ -95,15 +95,22 @@ angular.module('conFusion.services',['ngResource'])
             },
             filter: function(ids) {
                 return ids.filter(function(dish) { return dish.id in favorites; });
-            }
+            },
+
+            /*
+                ONLY to comply with the suggested solution in the course
+            */
+            getFavorites: function() {
+                return favorites;
+            },
         };
 
-        return favorites;
+        return provider;
     }])
 
-    .filter('favoriteFilter', ['favorite', function(favorite) {
+    .filter('favoriteFilter', ['favorites', function(favorites) {
         return function(dishes) {
-            return favorite.filter(dishes);
+            return favorites.filter(dishes);
         };
     }])
 

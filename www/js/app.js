@@ -6,7 +6,29 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $ionicLoading) {
+
+  $rootScope.$on('loading:show', function () {
+      $ionicLoading.show({
+          template: '<ion-spinner></ion-spinner> Loading ...'
+      })
+  });
+
+  $rootScope.$on('loading:hide', function () {
+      $ionicLoading.hide();
+  });
+/*
+  $rootScope.$on('$stateChangeStart', function () {
+      console.log('Loading ...');
+      $rootScope.$broadcast('loading:show');
+  });
+
+  $rootScope.$on('$stateChangeSuccess', function () {
+      console.log('done');
+      $rootScope.$broadcast('loading:hide');
+  });
+*/
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -25,11 +47,16 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/sidebar.html',
-    controller: 'AppCtrl'
+    controller: 'AppCtrl',
+    resolve: {
+      dishes: ['DishDAO', function(DishDAO) {
+        return DishDAO.query();
+      }],
+    },
   })
 
   .state('app.home', {
@@ -68,11 +95,6 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         'mainContent': {
           templateUrl: 'templates/menu.html',
           controller: 'MenuController',
-          resolve: {
-            dishes: ['DishDAO', function(DishDAO) {
-              return DishDAO.query();
-            }],
-          }
         }
       }
     })
@@ -83,13 +105,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         'mainContent': {
           templateUrl: 'templates/favorites.html',
           controller: 'FavoritesController',
-          resolve: {
-            dishes: ['DishDAO', function(DishDAO) {
-              return DishDAO.query();
-            }],
             // XXX Should do the same for favorites
-          },
-        }
+        },
       }
     })
 

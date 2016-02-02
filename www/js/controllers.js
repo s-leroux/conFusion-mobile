@@ -75,8 +75,22 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$scope', 'dishes', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
-                               function($scope, dishes, baseURL, favorite, $ionicListDelegate, $ionicPopup, $ionicLoading) {
+.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
+                               function($rootScope, $scope, dishes, baseURL, favorite, $ionicListDelegate, $ionicPopup, $ionicLoading) {
+
+  console.log('Start of MenuController');
+  console.log(dishes);
+
+
+
+
+  
+  if (!dishes.$resolved) {
+    $rootScope.$broadcast('loading:show');
+    dishes.$promise.then(function(data) {
+      $rootScope.$broadcast('loading:hide');
+    });
+  };
 
   $scope.baseURL = baseURL;
 

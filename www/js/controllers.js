@@ -75,8 +75,8 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favorite', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
-                               function($rootScope, $scope, dishes, baseURL, favorite, $ionicListDelegate, $ionicPopup, $ionicLoading) {
+.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favorites', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
+                               function($rootScope, $scope, dishes, baseURL, favorites, $ionicListDelegate, $ionicPopup, $ionicLoading) {
 
   console.log('Start of MenuController');
   console.log(dishes);
@@ -84,7 +84,7 @@ angular.module('conFusion.controllers', [])
 
 
 
-  
+
   if (!dishes.$resolved) {
     $rootScope.$broadcast('loading:show');
     dishes.$promise.then(function(data) {
@@ -112,7 +112,7 @@ angular.module('conFusion.controllers', [])
     template: "<ion-spinner></ion-spinner> Loading...",
   });
 
-  $scope.dishes = DishDAO.query(null,
+  $scope.dishes = menuFactory.query(null,
     function(data) {
       $scope.dishes = data;
       $scope.showMenu = true;
@@ -150,7 +150,7 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.addFavorite = function(id) {
-    favorite.add(id);
+    favorites.add(id);
     $ionicListDelegate.closeOptionButtons();
   };
 
@@ -162,14 +162,14 @@ angular.module('conFusion.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        favorite.remove(id);
+        favorites.remove(id);
       }
     });
     $ionicListDelegate.closeOptionButtons();
   };
 
   $scope.isFavorite = function(id) {
-    return favorite.contains(id);
+    return favorites.contains(id);
   };
 
 }])
@@ -211,7 +211,7 @@ angular.module('conFusion.controllers', [])
   $scope.invalidChannelSelection = false;
 }])
 
-.controller('FeedbackController', ['$scope', 'FeedbackDAO', 'baseURL', function($scope, FeedbackDAO, baseURL) {
+.controller('FeedbackController', ['$scope', 'feedbackFactory', 'baseURL', function($scope, feedbackFactory, baseURL) {
 
   $scope.baseURL = baseURL;
 
@@ -226,7 +226,7 @@ angular.module('conFusion.controllers', [])
       /*
           Save a *new* feedback on the server using a POST request.
       */
-      FeedbackDAO.save($scope.feedback,
+      feedbackFactory.save($scope.feedback,
         function() {
           $scope.message = "Feedback sent";
           $scope.sent = true;
@@ -256,9 +256,9 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favorite', 
+.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favorites', 
                                       '$ionicPopover', '$ionicPopup', '$ionicModal',
-                                     function($scope, dish, $stateParams, baseURL, favorite, 
+                                     function($scope, dish, $stateParams, baseURL, favorites, 
                                        $ionicPopover, $ionicPopup, $ionicModal) {
 
   $scope.baseURL = baseURL;
@@ -339,7 +339,7 @@ angular.module('conFusion.controllers', [])
       // wait till the end of the animation
       // before adding to the favorite to avoid
       // the menu "remove from favorites" to appear then
-      favorite.add(id); 
+      favorites.add(id); 
     });
   };
 
@@ -353,18 +353,18 @@ angular.module('conFusion.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        favorite.remove(id);
+        favorites.remove(id);
       }
     });
     $ionicListDelegate.closeOptionButtons();
   };
 
   $scope.isFavorite = function(id) {
-    return favorite.contains(id);
+    return favorites.contains(id);
   };
 
   /*
-  $scope.dish = DishDAO.get({
+  $scope.dish = menuFactory.get({
       id: parseInt($stateParams.id, 10)
     },
     function(data) {
@@ -415,8 +415,8 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-.controller('IndexController', ['LeaderDAO', 'DishDAO', 'PromotionDAO', 'baseURL', '$scope',
-  function(LeaderDAO, DishDAO, PromotionDAO, baseURL, $scope) {
+.controller('IndexController', ['leaderFactory', 'menuFactory', 'promotionFactory', 'baseURL', '$scope',
+  function(leaderFactory, menuFactory, promotionFactory, baseURL, $scope) {
 
     $scope.baseURL = baseURL;
     
@@ -430,7 +430,7 @@ angular.module('conFusion.controllers', [])
       $scope.messagePromition =
       $scope.messageEC = "Loading...";
 
-    $scope.featured = DishDAO.get({
+    $scope.featured = menuFactory.get({
         id: 0
       },
       function(data) {
@@ -441,7 +441,7 @@ angular.module('conFusion.controllers', [])
         $scope.messageFeatured = "Error: " + response.status + " " + response.statusText;
       }
     );
-    $scope.promotion = PromotionDAO.getPromotion({
+    $scope.promotion = promotionFactory.getPromotion({
         id: 0
       },
       function(data) {
@@ -452,7 +452,7 @@ angular.module('conFusion.controllers', [])
         $scope.messagePromotion = "Error: " + response.status + " " + response.statusText;
       }
     );
-    $scope.ec = LeaderDAO.getByRole({
+    $scope.ec = leaderFactory.getByRole({
         role: 'EC'
       },
       function(data) {
@@ -469,8 +469,8 @@ angular.module('conFusion.controllers', [])
 ])
 
 
-.controller('AboutController', ['LeaderDAO', '$scope', 'baseURL',
-  function(LeaderDAO, $scope, baseURL) {
+.controller('AboutController', ['leaderFactory', '$scope', 'baseURL',
+  function(leaderFactory, $scope, baseURL) {
 
     $scope.baseURL = baseURL;
 
@@ -479,7 +479,7 @@ angular.module('conFusion.controllers', [])
     $scope.showLeaders = false;
     $scope.message = "Loading...";
 
-    $scope.leaders = LeaderDAO.query(null,
+    $scope.leaders = leaderFactory.query(null,
       function(data) {
         $scope.leaders = data;
         $scope.showLeaders = true;

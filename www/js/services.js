@@ -24,7 +24,7 @@ angular.module('conFusion.services',['ngResource'])
         https://www.coursera.org/learn/angular-js/module/tJ7jz/discussions/koGgqKcCEeWiXxLB9mtqCw
     */
 
-    .factory('DishDAO', ['$resource', 'baseURL', function($resource, baseURL) {
+    .factory('menuFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         return $resource(baseURL+'dishes/:id', null, {
             // extra methods
             update: {
@@ -40,14 +40,14 @@ angular.module('conFusion.services',['ngResource'])
         });
     }])
 
-    .factory('LeaderDAO', ['$resource', 'baseURL', function($resource, baseURL) {
+    .factory('leaderFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         return $resource(baseURL+'leadership/:id', null, {
             // extra methods
             getByRole: { params: {abbr:'@role'}, method: 'GET', isArray: true }
         });
     }])
 
-    .factory('PromotionDAO', ['$resource', 'baseURL', function($resource, baseURL) {
+    .factory('promotionFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         return $resource(baseURL+'promotions/:id', null, {
             // extra methods
             getPromotion: {
@@ -67,14 +67,14 @@ angular.module('conFusion.services',['ngResource'])
         });
     }])
 
-    .factory('FeedbackDAO', ['$resource', 'baseURL', function($resource, baseURL) {
+    .factory('feedbackFactory', ['$resource', 'baseURL', function($resource, baseURL) {
         return $resource(baseURL+'feedback/:id', null, {
             // extra methods
         });
     }])
 
 
-    .factory('favorite', ['$resource', 'baseURL', function($resource, baseURL) {
+    .factory('favorites', ['$resource', 'baseURL', function($resource, baseURL) {
         var favorites = Object.create(null);
         // Better using Object.create(null) above rather than {}
         // to ensure there is no properties in the prototype chain that
@@ -83,7 +83,7 @@ angular.module('conFusion.services',['ngResource'])
         // See http://stackoverflow.com/questions/15518328/creating-js-object-with-object-createnull
         // and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
 
-        var favorite = {
+        var favorites = {
             contains: function(id) {
                 return id in favorites;
             },
@@ -98,7 +98,7 @@ angular.module('conFusion.services',['ngResource'])
             }
         };
 
-        return favorite;
+        return favorites;
     }])
 
     .filter('favoriteFilter', ['favorite', function(favorite) {

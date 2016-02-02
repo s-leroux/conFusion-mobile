@@ -16,7 +16,7 @@
                     href="#/app/menu/{{dish.id}}"
                     class="item-thumbnail-left">
 
-        <img src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
+        <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
         <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
           <span class="ion-ios-star icon" aria-label="favorite">
           </span>

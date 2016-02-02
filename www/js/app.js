@@ -53,8 +53,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
     templateUrl: 'templates/sidebar.html',
     controller: 'AppCtrl',
     resolve: {
-      dishes: ['DishDAO', function(DishDAO) {
-        return DishDAO.query();
+      dishes: ['menuFactory', function(menuFactory) {
+        return menuFactory.query();
       }],
     },
   })
@@ -117,8 +117,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         templateUrl: 'templates/dishdetails.html',
         controller: 'DishDetailController',
         resolve: {
-          dish: ['DishDAO', '$stateParams', function(DishDAO, $stateParams) {
-            return DishDAO.get({id:parseInt($stateParams.id, 10)});
+          dish: ['menuFactory', '$stateParams', function(menuFactory, $stateParams) {
+            return menuFactory.get({id:parseInt($stateParams.id, 10)});
           }],
         }
       }

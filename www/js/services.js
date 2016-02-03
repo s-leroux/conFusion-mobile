@@ -1,6 +1,6 @@
 'use strict';
 angular.module('conFusion.services',['ngResource'])
-    .constant("baseURL","http://10.129.36.44:3000/")
+    .constant("baseURL","http://localhost:3000/")
 
     /*
         I didn't follow exactly the way things are implemented in the course
@@ -41,9 +41,17 @@ angular.module('conFusion.services',['ngResource'])
     }])
 
     .factory('leaderFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-        return $resource(baseURL+'leadership/:id', null, {
+        return $resource(baseURL+'leadership', null, {
             // extra methods
-            getByRole: { params: {abbr:'@role'}, method: 'GET', isArray: true }
+            getByRole: { method: 'GET',
+                         isArray: false,
+                         /* Custom transformation as the server will return an array
+                            and we expect an object */
+                         transformResponse: function(data, header) {
+                            console.log(data);
+                            return angular.fromJson(data)[0];
+                         }
+                     }
         });
     }])
 

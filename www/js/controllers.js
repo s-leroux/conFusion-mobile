@@ -416,80 +416,36 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-.controller('IndexController', ['leaderFactory', 'menuFactory', 'promotionFactory', 'baseURL', '$scope',
-  function(leaderFactory, menuFactory, promotionFactory, baseURL, $scope) {
+.controller('IndexController', ['ec', 'featured', 'promotion', 'baseURL', '$scope',
+  function(ec, featured, promotion, baseURL, $scope) {
 
     $scope.baseURL = baseURL;
     
-    $scope.featured =
-      $scope.promotion =
-      $scope.ec = {};
-    $scope.showLeaders =
-      $scope.showPromotion =
-      $scope.showEC = false;
-    $scope.messageFeatured =
-      $scope.messagePromition =
-      $scope.messageEC = "Loading...";
+    $scope.featured = featured;
+    $scope.promotion = promotion;
+    $scope.ec = ec;
 
-    $scope.featured = menuFactory.get({
-        id: 0
-      },
-      function(data) {
-        $scope.featured = data;
-        $scope.showFeatured = true;
-      },
-      function(response) {
-        $scope.messageFeatured = "Error: " + response.status + " " + response.statusText;
-      }
-    );
-    $scope.promotion = promotionFactory.getPromotion({
-        id: 0
-      },
-      function(data) {
-        $scope.promotion = data;
-        $scope.showPromotion = true;
-      },
-      function(response) {
-        $scope.messagePromotion = "Error: " + response.status + " " + response.statusText;
-      }
-    );
-    $scope.ec = leaderFactory.getByRole({
-        role: 'EC'
-      },
-      function(data) {
-        // As I query by an attribute (abbr) instead
-        // of by id, the response is an array
-        $scope.ec = data[0];
-        $scope.showEC = true;
-      },
-      function(response) {
-        $scope.messageEC = "Error: " + response.status + " " + response.statusText;
-      }
-    );
+    ec.$promise.then(function(data) {
+      ec = data[0];
+    });
+
+    console.log("ec");
+    console.log(ec);
+    console.log("featured");
+    console.log(featured);
   }
 ])
 
 
-.controller('AboutController', ['leaderFactory', '$scope', 'baseURL',
-  function(leaderFactory, $scope, baseURL) {
+.controller('AboutController', ['leaders', '$scope', 'baseURL',
+  function(leaders, $scope, baseURL) {
 
     $scope.baseURL = baseURL;
 
 
-    $scope.leaders = {};
+    $scope.leaders = leaders;
     $scope.showLeaders = false;
     $scope.message = "Loading...";
-
-    $scope.leaders = leaderFactory.query(null,
-      function(data) {
-        $scope.leaders = data;
-        $scope.showLeaders = true;
-        $scope.message = "";
-      },
-      function(response) {
-        $scope.message = "Error: " + response.status + " " + response.statusText;
-      }
-    );
   }
 ])
 

@@ -8,26 +8,26 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
 
 .run(function($ionicPlatform, $rootScope, $ionicLoading) {
 
-  $rootScope.$on('loading:show', function () {
-      $ionicLoading.show({
-          template: '<ion-spinner></ion-spinner> Loading ...'
-      })
+  $rootScope.$on('loading:show', function() {
+    $ionicLoading.show({
+      template: '<ion-spinner></ion-spinner> Loading ...'
+    })
   });
 
-  $rootScope.$on('loading:hide', function () {
-      $ionicLoading.hide();
+  $rootScope.$on('loading:hide', function() {
+    $ionicLoading.hide();
   });
-/*
-  $rootScope.$on('$stateChangeStart', function () {
-      console.log('Loading ...');
-      $rootScope.$broadcast('loading:show');
-  });
+  /*
+    $rootScope.$on('$stateChangeStart', function () {
+        console.log('Loading ...');
+        $rootScope.$broadcast('loading:show');
+    });
 
-  $rootScope.$on('$stateChangeSuccess', function () {
-      console.log('done');
-      $rootScope.$broadcast('loading:hide');
-  });
-*/
+    $rootScope.$on('$stateChangeSuccess', function () {
+        console.log('done');
+        $rootScope.$broadcast('loading:hide');
+    });
+  */
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -47,7 +47,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-  .state('app', {
+    .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/sidebar.html',
@@ -64,63 +64,79 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
     views: {
       'mainContent': {
         templateUrl: 'templates/home.html',
-        controller: 'IndexController'
+        controller: 'IndexController',
+        resolve: {
+          ec: ['leaderFactory', function(leaderFactory) {
+            return leaderFactory.getByRole({abbr: 'EC'});
+          }],
+          featured: ['menuFactory', function(menuFactory) {
+            return menuFactory.get({id: 0});
+          }],
+          promotion: ['promotionFactory', function(promotionFactory) {
+            return promotionFactory.get({id: 0});
+          }],
+        },
       }
     }
   })
 
   .state('app.aboutus', {
-      url: '/aboutus',
-      views: {
-        'mainContent': {
-          templateUrl: 'templates/aboutus.html',
-          controller: 'AboutController'
-        }
-      }
-    })
-
-  .state('app.contactus', {
-      url: '/contactus',
-      views: {
-        'mainContent': {
-          templateUrl: 'templates/contactus.html',
-          controller: 'ContactController'
-        }
-      }
-    })
-
-    .state('app.menu', {
-      url: '/menu',
-      views: {
-        'mainContent': {
-          templateUrl: 'templates/menu.html',
-          controller: 'MenuController',
-          // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/EpxPAsjzEeWs-BKzmUStyw/replies/ppf9u8mFEeWUXxL-L9OQmQ/comments/HCzntcmwEeW7ZQq25xfj8w
-          // for why dishes resolver has been moved up to the "app" state
-        }
-      }
-    })
-
-    .state('app.favorites', {
-      url: '/favorites',
-      views: {
-        'mainContent': {
-          templateUrl: 'templates/favorites.html',
-          controller: 'FavoritesController',
-          resolve: {
-            // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/EpxPAsjzEeWs-BKzmUStyw/replies/ppf9u8mFEeWUXxL-L9OQmQ/comments/HCzntcmwEeW7ZQq25xfj8w
-            // for why dishes resolver has been moved up to the "app" state
-
-            /*
-                ONLY to comply with the suggested solution in the course
-            */
-            favorites: ['favorites', function(favorites) {
-              return favorites.getFavorites();
-            }],
-          },
+    url: '/aboutus',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/aboutus.html',
+        controller: 'AboutController',
+        resolve: {
+          leaders: ['leaderFactory', function(leaderFactory) {
+            return leaderFactory.query();
+          }],
         },
       }
-    })
+    }
+  })
+
+  .state('app.contactus', {
+    url: '/contactus',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/contactus.html',
+        controller: 'ContactController'
+      }
+    }
+  })
+
+  .state('app.menu', {
+    url: '/menu',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/menu.html',
+        controller: 'MenuController',
+        // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/EpxPAsjzEeWs-BKzmUStyw/replies/ppf9u8mFEeWUXxL-L9OQmQ/comments/HCzntcmwEeW7ZQq25xfj8w
+        // for why dishes resolver has been moved up to the "app" state
+      }
+    }
+  })
+
+  .state('app.favorites', {
+    url: '/favorites',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/favorites.html',
+        controller: 'FavoritesController',
+        resolve: {
+          // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/EpxPAsjzEeWs-BKzmUStyw/replies/ppf9u8mFEeWUXxL-L9OQmQ/comments/HCzntcmwEeW7ZQq25xfj8w
+          // for why dishes resolver has been moved up to the "app" state
+
+          /*
+              ONLY to comply with the suggested solution in the course
+          */
+          favorites: ['favorites', function(favorites) {
+            return favorites.getFavorites();
+          }],
+        },
+      },
+    }
+  })
 
   .state('app.dishdetails', {
     url: '/menu/:id',
@@ -130,7 +146,9 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         controller: 'DishDetailController',
         resolve: {
           dish: ['menuFactory', '$stateParams', function(menuFactory, $stateParams) {
-            return menuFactory.get({id:parseInt($stateParams.id, 10)});
+            return menuFactory.get({
+              id: parseInt($stateParams.id, 10)
+            });
           }],
         }
       }

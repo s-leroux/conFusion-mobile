@@ -1,6 +1,6 @@
 'use strict';
 angular.module('conFusion.services',['ngResource'])
-    .constant("baseURL","http://localhost:3000/")
+    .constant("baseURL","http://10.129.36.44:3000/")
 
     /*
         I didn't follow exactly the way things are implemented in the course

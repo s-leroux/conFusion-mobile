@@ -78,12 +78,18 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favorites', '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
-                               function($rootScope, $scope, dishes, baseURL, favorites, $ionicListDelegate, $ionicPopup, $ionicLoading) {
+.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favoriteProvider', 
+                               '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
+                               '$localStorage',
+                               function($rootScope, $scope, dishes, baseURL, favoriteProvider, 
+                                   $ionicListDelegate, $ionicPopup, $ionicLoading,
+                                   $localStorage) {
 
   console.log('Start of MenuController');
   console.log(dishes);
 
+  // See https://www.coursera.org/learn/hybrid-mobile-development/module/axpl2/discussions/laLZpMevEeW2Jgr23ucAdw
+  // for the reason wgy the spinning wheel is implemented that way
   if (!dishes.$resolved) {
     $rootScope.$broadcast('loading:show');
     dishes.$promise.then(function(data) {
@@ -151,7 +157,11 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.addFavorite = function(id) {
-    favorites.add(id);
+    favoriteProvider.add(id);
+    /* To adhere to the "Don't repeat yourself" principle,
+       favorite persistance is handled by the favoriteProvider service.
+       Not in each controller separately
+    */
     $ionicListDelegate.closeOptionButtons();
   };
 
@@ -163,19 +173,29 @@ angular.module('conFusion.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        favorites.remove(id);
+        favoriteProvider.remove(id);
+        /* To adhere to the "Don't repeat yourself" principle,
+           favorite persistance is handled by the favoriteProvider service.
+           Not in each controller separately
+        */
       }
     });
     $ionicListDelegate.closeOptionButtons();
   };
 
   $scope.isFavorite = function(id) {
-    return favorites.contains(id);
+    return favoriteProvider.contains(id);
   };
 
 }])
 
-.controller('FavoritesController', ['$scope', '$controller', 'dishes', function($scope, $controller, dishes) {
+.controller('FavoritesController', ['$scope', '$controller', 'dishes', 
+                                    'favorites',
+                                    function($scope, $controller, dishes, favorites) {
+
+  // For compatibility with existing code ONLY
+  $scope.favorites = favorites;
+
   // In my implementation, a FavoriteController is just a specialized version of the
   // MenuController. I will simply extend it here to avoid code duplication.
   //
@@ -185,6 +205,8 @@ angular.module('conFusion.controllers', [])
     $scope: $scope,
     dishes: dishes,
   });
+
+  // Favorite persistance is in the favoriteProvider in services.js
 
   $scope.shouldShowDelete = false;
   $scope.toggleDelete = function() {
@@ -257,10 +279,12 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favorites', 
+.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favoriteProvider', 
                                       '$ionicPopover', '$ionicPopup', '$ionicModal',
-                                     function($scope, dish, $stateParams, baseURL, favorites, 
-                                       $ionicPopover, $ionicPopup, $ionicModal) {
+                                      '$localStorage',
+                                     function($scope, dish, $stateParams, baseURL, favoriteProvider, 
+                                       $ionicPopover, $ionicPopup, $ionicModal,
+                                       $localStorage) {
 
   $scope.baseURL = baseURL;
 
@@ -295,7 +319,8 @@ angular.module('conFusion.controllers', [])
 
   $scope.commentData = {
     rating : 5,
-    author: "",
+    // Pre-fill the author comment field with login data
+    author: $localStorage.getObject('userinfo', '{username=""}').username,
     comment: "",
     date: null,
   };
@@ -340,7 +365,11 @@ angular.module('conFusion.controllers', [])
       // wait till the end of the animation
       // before adding to the favorite to avoid
       // the menu "remove from favorites" to appear then
-      favorites.add(id); 
+      favoriteProvider.add(id); 
+      /* To adhere to the "Don't repeat yourself" principle,
+         favorite persistance is handled by the favoriteProvider service.
+         Not in each controller separately
+      */
     });
   };
 
@@ -354,14 +383,18 @@ angular.module('conFusion.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        favorites.remove(id);
+        favoriteProvider.remove(id);
+        /* To adhere to the "Don't repeat yourself" principle,
+           favorite persistance is handled by the favoriteProvider service.
+           Not in each controller separately
+        */
       }
     });
     $ionicListDelegate.closeOptionButtons();
   };
 
   $scope.isFavorite = function(id) {
-    return favorites.contains(id);
+    return favoriteProvider.contains(id);
   };
 
   /*

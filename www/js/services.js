@@ -1,6 +1,23 @@
 'use strict';
 angular.module('conFusion.services',['ngResource'])
     .constant("baseURL","http://localhost:3000/")
+    
+    .factory('$localStorage', ['$window', function($window) {
+      return {
+        store: function(key, value) {
+          $window.localStorage[key] = value;
+        },
+        get: function(key, defaultValue) {
+          return $window.localStorage[key] || defaultValue;
+        },
+        storeObject: function(key, value) {
+          $window.localStorage[key] = JSON.stringify(value);
+        },
+        getObject: function(key,defaultValue) {
+          return JSON.parse($window.localStorage[key] || defaultValue);
+        }
+      }
+    }])
 
     /*
         I didn't follow exactly the way things are implemented in the course
@@ -48,7 +65,6 @@ angular.module('conFusion.services',['ngResource'])
                          /* Custom transformation as the server will return an array
                             and we expect an object */
                          transformResponse: function(data, header) {
-                            console.log(data);
                             return angular.fromJson(data)[0];
                          }
                      }
@@ -82,7 +98,12 @@ angular.module('conFusion.services',['ngResource'])
     }])
 
 
-    .factory('favorites', ['$resource', 'baseURL', function($resource, baseURL) {
+    .factory('favoriteProvider', ['$resource', 'baseURL', '$localStorage',
+                                 function($resource, baseURL, $localStorage) {
+
+
+        /*
+
         var favorites = Object.create(null);
         // Better using Object.create(null) above rather than {}
         // to ensure there is no properties in the prototype chain that
@@ -91,15 +112,25 @@ angular.module('conFusion.services',['ngResource'])
         // See http://stackoverflow.com/questions/15518328/creating-js-object-with-object-createnull
         // and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create
 
+        */
+
+        // FIXME: as the localStorage is using JSON parser, we loose the ability
+        // to set the objet prototype to null. Hence possible issues requiring
+        // extra calls to hasOwnProterty                                    
+        var favorites = $localStorage.getObject('favorites', '{}');
+
+
         var provider = {
             contains: function(id) {
                 return id in favorites;
             },
             add: function(id) {
                 favorites[id] = true;
+                $localStorage.storeObject('favorites', favorites);
             },
             remove: function(id) {
                 delete favorites[id];
+                $localStorage.storeObject('favorites', favorites);
             },
             filter: function(ids) {
                 return ids.filter(function(dish) { return dish.id in favorites; });
@@ -116,27 +147,10 @@ angular.module('conFusion.services',['ngResource'])
         return provider;
     }])
 
-    .filter('favoriteFilter', ['favorites', function(favorites) {
+    .filter('favoriteFilter', ['favoriteProvider', function(favoriteProvider) {
         return function(dishes) {
-            return favorites.filter(dishes);
+            return favoriteProvider.filter(dishes);
         };
-    }])
-    
-    .factory('$localStorage', ['$window', function($window) {
-      return {
-        store: function(key, value) {
-          $window.localStorage[key] = value;
-        },
-        get: function(key, defaultValue) {
-          return $window.localStorage[key] || defaultValue;
-        },
-        storeObject: function(key, value) {
-          $window.localStorage[key] = JSON.stringify(value);
-        },
-        getObject: function(key,defaultValue) {
-          return JSON.parse($window.localStorage[key] || defaultValue);
-        }
-      }
     }])
 
 

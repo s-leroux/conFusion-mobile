@@ -130,8 +130,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
           /*
               ONLY to comply with the suggested solution in the course
           */
-          favorites: ['favorites', function(favorites) {
-            return favorites.getFavorites();
+          favorites: ['favoriteProvider', function(favoriteProvider) {
+            return favoriteProvider.getFavorites();
           }],
         },
       },

@@ -66,7 +66,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         templateUrl: 'templates/home.html',
         controller: 'IndexController',
         resolve: {
-          ec: ['leaderFactory', function(leaderFactory) {
+          leader: ['leaderFactory', function(leaderFactory) {
             return leaderFactory.getByRole({abbr: 'EC'});
           }],
           featured: ['menuFactory', function(menuFactory) {

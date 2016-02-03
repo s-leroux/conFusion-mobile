@@ -69,7 +69,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
           leader: ['leaderFactory', function(leaderFactory) {
             return leaderFactory.getByRole({abbr: 'EC'});
           }],
-          featured: ['menuFactory', function(menuFactory) {
+          dish: ['menuFactory', function(menuFactory) {
             return menuFactory.get({id: 0});
           }],
           promotion: ['promotionFactory', function(promotionFactory) {

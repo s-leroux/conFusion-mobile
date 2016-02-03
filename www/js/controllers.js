@@ -449,12 +449,12 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-.controller('IndexController', ['leader', 'featured', 'promotion', 'baseURL', '$scope',
-  function(leader, featured, promotion, baseURL, $scope) {
+.controller('IndexController', ['leader', 'dish', 'promotion', 'baseURL', '$scope',
+  function(leader, dish, promotion, baseURL, $scope) {
 
     $scope.baseURL = baseURL;
     
-    $scope.featured = featured;
+    $scope.dish = dish;
     $scope.promotion = promotion;
     $scope.leader = leader;
 
@@ -464,8 +464,8 @@ angular.module('conFusion.controllers', [])
 
     console.log("leader");
     console.log(leader);
-    console.log("featured");
-    console.log(featured);
+    console.log("dish");
+    console.log(dish);
   }
 ])
 

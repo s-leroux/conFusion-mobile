@@ -98,7 +98,7 @@ angular.module('conFusion.services',['ngResource'])
     }])
 
 
-    .factory('favoriteProvider', ['$resource', 'baseURL', '$localStorage',
+    .factory('favoriteFactory', ['$resource', 'baseURL', '$localStorage',
                                  function($resource, baseURL, $localStorage) {
 
 
@@ -147,9 +147,9 @@ angular.module('conFusion.services',['ngResource'])
         return provider;
     }])
 
-    .filter('favoriteFilter', ['favoriteProvider', function(favoriteProvider) {
+    .filter('favoriteFilter', ['favoriteFactory', function(favoriteFactory) {
         return function(dishes) {
-            return favoriteProvider.filter(dishes);
+            return favoriteFactory.filter(dishes);
         };
     }])
 

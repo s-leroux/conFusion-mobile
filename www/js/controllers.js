@@ -78,10 +78,10 @@ angular.module('conFusion.controllers', [])
   }
 })
 
-.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favoriteProvider', 
+.controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favoriteFactory', 
                                '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
                                '$localStorage',
-                               function($rootScope, $scope, dishes, baseURL, favoriteProvider, 
+                               function($rootScope, $scope, dishes, baseURL, favoriteFactory, 
                                    $ionicListDelegate, $ionicPopup, $ionicLoading,
                                    $localStorage) {
 
@@ -157,9 +157,9 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.addFavorite = function(id) {
-    favoriteProvider.add(id);
+    favoriteFactory.add(id);
     /* To adhere to the "Don't repeat yourself" principle,
-       favorite persistance is handled by the favoriteProvider service.
+       favorite persistance is handled by the favoriteFactory service.
        Not in each controller separately
     */
     $ionicListDelegate.closeOptionButtons();
@@ -173,9 +173,9 @@ angular.module('conFusion.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        favoriteProvider.remove(id);
+        favoriteFactory.remove(id);
         /* To adhere to the "Don't repeat yourself" principle,
-           favorite persistance is handled by the favoriteProvider service.
+           favorite persistance is handled by the favoriteFactory service.
            Not in each controller separately
         */
       }
@@ -184,7 +184,7 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.isFavorite = function(id) {
-    return favoriteProvider.contains(id);
+    return favoriteFactory.contains(id);
   };
 
 }])
@@ -206,7 +206,7 @@ angular.module('conFusion.controllers', [])
     dishes: dishes,
   });
 
-  // Favorite persistance is in the favoriteProvider in services.js
+  // Favorite persistance is in the favoriteFactory in services.js
 
   $scope.shouldShowDelete = false;
   $scope.toggleDelete = function() {
@@ -279,10 +279,10 @@ angular.module('conFusion.controllers', [])
   };
 }])
 
-.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favoriteProvider', 
+.controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favoriteFactory', 
                                       '$ionicPopover', '$ionicPopup', '$ionicModal',
                                       '$localStorage',
-                                     function($scope, dish, $stateParams, baseURL, favoriteProvider, 
+                                     function($scope, dish, $stateParams, baseURL, favoriteFactory, 
                                        $ionicPopover, $ionicPopup, $ionicModal,
                                        $localStorage) {
 
@@ -365,9 +365,9 @@ angular.module('conFusion.controllers', [])
       // wait till the end of the animation
       // before adding to the favorite to avoid
       // the menu "remove from favorites" to appear then
-      favoriteProvider.add(id); 
+      favoriteFactory.add(id); 
       /* To adhere to the "Don't repeat yourself" principle,
-         favorite persistance is handled by the favoriteProvider service.
+         favorite persistance is handled by the favoriteFactory service.
          Not in each controller separately
       */
     });
@@ -383,9 +383,9 @@ angular.module('conFusion.controllers', [])
 
     confirmPopup.then(function(res) {
       if (res) {
-        favoriteProvider.remove(id);
+        favoriteFactory.remove(id);
         /* To adhere to the "Don't repeat yourself" principle,
-           favorite persistance is handled by the favoriteProvider service.
+           favorite persistance is handled by the favoriteFactory service.
            Not in each controller separately
         */
       }
@@ -394,7 +394,7 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.isFavorite = function(id) {
-    return favoriteProvider.contains(id);
+    return favoriteFactory.contains(id);
   };
 
   /*

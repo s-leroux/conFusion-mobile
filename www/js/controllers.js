@@ -1,7 +1,7 @@
 angular.module('conFusion.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $localStorage, 
-              $ionicPlatform, $cordovaCamera) {
+              $ionicPlatform, $cordovaCamera, $cordovaImagePicker) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -76,9 +76,9 @@ angular.module('conFusion.controllers', [])
   };
 
   // CAMERA
-  if (typeof Camera !== 'undefined') {
-    $ionicPlatform.ready(function() {
-      var options = {
+  $ionicPlatform.ready(function() {
+    if (typeof Camera !== 'undefined') {
+      var cameraOptions = {
           quality: 50,
           destinationType: Camera.DestinationType.DATA_URL,
           sourceType: Camera.PictureSourceType.CAMERA,
@@ -90,7 +90,7 @@ angular.module('conFusion.controllers', [])
           saveToPhotoAlbum: false
       };
       $scope.takePicture = function() {
-          $cordovaCamera.getPicture(options).then(function(imageData) {
+          $cordovaCamera.getPicture(cameraOptions).then(function(imageData) {
               $scope.registration.imgSrc = "data:image/jpeg;base64," + imageData;
           }, function(err) {
               console.log(err);
@@ -99,8 +99,36 @@ angular.module('conFusion.controllers', [])
           $scope.registerform.show();
 
       };
-    });
-  }
+    }
+
+    $scope.selectPicture = function() {
+        $cordovaImagePicker.getPictures({
+          maximumImagesCount: 1,
+          quality: 50,
+          // https://github.com/wymsee/cordova-imagePicker and
+          // http://ngcordova.com/docs/plugins/imagePicker/ disagree
+          // on the height/width semantic.
+          //
+          // Apparently, setting both will ensure the image fit in the given
+          // dimensions preserving the aspect ratio. This is NOT what
+          // is explained in http://ngcordova.com/docs/plugins/imagePicker/
+          height: 100, 
+          width: 100,
+        }).then(function(results) {
+            if (results.length) {
+              console.log("Load picture: " + results[0]);
+              $scope.registration.imgSrc = results[0];
+            }
+        }, function(err) {
+            console.log("getPictures: " + err);
+        });
+
+        $scope.registerform.show();
+
+    }
+
+
+  });
 
   // RESERVE TABLE
 

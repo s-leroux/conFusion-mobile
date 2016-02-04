@@ -80,10 +80,12 @@ angular.module('conFusion.controllers', [])
 
 .controller('MenuController', ['$rootScope', '$scope', 'dishes', 'baseURL', 'favoriteFactory', 
                                '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
-                               '$localStorage',
+                               '$localStorage', 
+                               '$ionicPlatform', '$cordovaLocalNotification', '$cordovaToast',
                                function($rootScope, $scope, dishes, baseURL, favoriteFactory, 
                                    $ionicListDelegate, $ionicPopup, $ionicLoading,
-                                   $localStorage) {
+                                   $localStorage,
+                                   $ionicPlatform, $cordovaLocalNotification, $cordovaToast) {
 
   console.log('Start of MenuController');
   console.log(dishes);
@@ -156,6 +158,12 @@ angular.module('conFusion.controllers', [])
     $scope.showDetails = !$scope.showDetails;
   };
 
+  // console.log(typeof dishes);
+  // console.dir(dishes);
+  function getDishName(id) {
+    return dishes.find(function(dish) { return dish.id == id }).name;
+  }
+
   $scope.addFavorite = function(id) {
     favoriteFactory.add(id);
     /* To adhere to the "Don't repeat yourself" principle,
@@ -163,6 +171,27 @@ angular.module('conFusion.controllers', [])
        Not in each controller separately
     */
     $ionicListDelegate.closeOptionButtons();
+
+    $ionicPlatform.ready(function () {
+      $cordovaLocalNotification.schedule({
+          id: 1,
+          title: "Added Favorite",
+          text: 'Added Favorite ' + getDishName(id),
+      }).then(function () {
+          console.log('Added Favorite '+getDishName(id));
+      },
+      function () {
+          console.log('Failed to send notification ');
+      });
+
+      $cordovaToast
+        .show('Added Favorite '+getDishName(id), 'long', 'center')
+        .then(function (success) {
+            // success
+        }, function (error) {
+            // error
+        });
+    });
   };
 
   $scope.removeFavorite = function(id) {

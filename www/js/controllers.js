@@ -75,8 +75,10 @@ angular.module('conFusion.controllers', [])
       }, 1000);
   };
 
-  // CAMERA
   $ionicPlatform.ready(function() {
+    //
+    // CAMERA
+    //
     if (typeof Camera !== 'undefined') {
       var cameraOptions = {
           quality: 50,
@@ -99,8 +101,15 @@ angular.module('conFusion.controllers', [])
           $scope.registerform.show();
 
       };
+    } else {
+      $scope.takePicture = function() {
+        console.log("Camera unavailable");
+      }      
     }
 
+    //
+    // GALLERIE
+    //
     $scope.selectPicture = function() {
         $cordovaImagePicker.getPictures({
           maximumImagesCount: 1,
@@ -126,7 +135,6 @@ angular.module('conFusion.controllers', [])
         $scope.registerform.show();
 
     }
-
 
   });
 
@@ -171,10 +179,12 @@ angular.module('conFusion.controllers', [])
                                '$ionicListDelegate', '$ionicPopup', '$ionicLoading',
                                '$localStorage', 
                                '$ionicPlatform', '$cordovaLocalNotification', '$cordovaToast',
+                               '$cordovaVibration',
                                function($rootScope, $scope, dishes, baseURL, favoriteFactory, 
                                    $ionicListDelegate, $ionicPopup, $ionicLoading,
                                    $localStorage,
-                                   $ionicPlatform, $cordovaLocalNotification, $cordovaToast) {
+                                   $ionicPlatform, $cordovaLocalNotification, $cordovaToast,
+                                   $cordovaVibration) {
 
   console.log('Start of MenuController');
   console.log(dishes);
@@ -298,6 +308,10 @@ angular.module('conFusion.controllers', [])
            favorite persistance is handled by the favoriteFactory service.
            Not in each controller separately
         */
+
+        // FIXME: Factore me out to avoid duplication (esp. the duration parameter)
+        //        Better design would use event on add/remove favorite
+        $cordovaVibration.vibrate(100);
       }
     });
     $ionicListDelegate.closeOptionButtons();
@@ -404,11 +418,13 @@ angular.module('conFusion.controllers', [])
                                       '$localStorage',
                                       '$ionicPlatform', '$cordovaLocalNotification', 
                                       '$cordovaToast',
+                                      '$cordovaVibration',
                                      function($scope, dish, $stateParams, baseURL, favoriteFactory, 
                                        $ionicPopover, $ionicPopup, $ionicModal,
                                        $localStorage,
                                        $ionicPlatform, $cordovaLocalNotification, 
-                                       $cordovaToast) {
+                                       $cordovaToast,
+                                       $cordovaVibration) {
 
   $scope.baseURL = baseURL;
 
@@ -536,6 +552,10 @@ angular.module('conFusion.controllers', [])
            favorite persistance is handled by the favoriteFactory service.
            Not in each controller separately
         */
+
+        // FIXME: Factore me out to avoid duplication (esp. the duration parameter)
+        //        Better design would use event on add/remove favorite
+        $cordovaVibration.vibrate(100);
       }
     });
     $ionicListDelegate.closeOptionButtons();

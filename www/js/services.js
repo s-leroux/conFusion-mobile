@@ -14,6 +14,11 @@ angular.module('conFusion.services',['ngResource'])
           $window.localStorage[key] = JSON.stringify(value);
         },
         getObject: function(key,defaultValue) {
+            console.log($window.localStorage[key]);
+            console.log(typeof $window.localStorage[key]);
+            console.log(defaultValue);
+            console.log(typeof defaultValue);
+            console.log($window.localStorage[key] || defaultValue);
           return JSON.parse($window.localStorage[key] || defaultValue);
         }
       }

@@ -261,6 +261,8 @@ angular.module('conFusion.controllers', [])
     */
     $ionicListDelegate.closeOptionButtons();
 
+    // TODO: factore out that code to the App controller to
+    // reduce code duplication.
     $ionicPlatform.ready(function () {
       $cordovaLocalNotification.schedule({
           id: 1,
@@ -400,9 +402,13 @@ angular.module('conFusion.controllers', [])
 .controller('DishDetailController', ['$scope', 'dish', '$stateParams', 'baseURL', 'favoriteFactory', 
                                       '$ionicPopover', '$ionicPopup', '$ionicModal',
                                       '$localStorage',
+                                      '$ionicPlatform', '$cordovaLocalNotification', 
+                                      '$cordovaToast',
                                      function($scope, dish, $stateParams, baseURL, favoriteFactory, 
                                        $ionicPopover, $ionicPopup, $ionicModal,
-                                       $localStorage) {
+                                       $localStorage,
+                                       $ionicPlatform, $cordovaLocalNotification, 
+                                       $cordovaToast) {
 
   $scope.baseURL = baseURL;
 
@@ -438,7 +444,7 @@ angular.module('conFusion.controllers', [])
   $scope.commentData = {
     rating : 5,
     // Pre-fill the author comment field with login data
-    author: $localStorage.getObject('userinfo', '{username=""}').username,
+    author: $localStorage.getObject('userinfo', '{"username":""}').username,
     comment: "",
     date: null,
   };
@@ -488,6 +494,30 @@ angular.module('conFusion.controllers', [])
          favorite persistance is handled by the favoriteFactory service.
          Not in each controller separately
       */
+
+      // TODO: factore out that code to the App controller to
+      // reduce code duplication.
+      $ionicPlatform.ready(function () {
+        $cordovaLocalNotification.schedule({
+            id: 1, // FIXME: should we update the id globally for the whole app ?
+            title: "Added Favorite",
+            text: 'Added Favorite ' + $scope.dish.name,
+        }).then(function () {
+            console.log('Notification send '+ $scope.dish.name);
+        },
+        function () {
+            console.log('Failed to send notification ');
+        });
+
+        $cordovaToast
+          .show('Added Favorite '+ $scope.dish.name, 'long', 'bottom')
+          .then(function (success) {
+            console.log('Notification send '+ $scope.dish.name);
+          }, function (error) {
+            console.log('Failed to put toast notification ');
+          });
+      });
+
     });
   };
 

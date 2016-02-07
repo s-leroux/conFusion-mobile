@@ -21,3 +21,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+.menu .item-divider {
+  background-color: $item_positive_bg;
+  color: $item-positive-text;
+}
+

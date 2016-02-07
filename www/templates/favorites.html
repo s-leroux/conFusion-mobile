@@ -12,7 +12,7 @@
       <ion-item ng-repeat="dish in dishes | favoriteFilter" 
                     href="#/app/menu/{{dish.id}}"
                     class="item-thumbnail-left"
-                    on-swipe-left="removeFavorite(dish.id)">
+                    on-swipe-left="deleteFavorite(dish.id)">
 
         <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
         <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
@@ -24,7 +24,7 @@
         <span style="font-size:75%">{{dish.price | currency}}</span></h2>
         <p>{{dish.description}}</p>
         <ion-delete-button class="ion-minus-circled"
-              ng-click="removeFavorite(dish.id)">
+              ng-click="deleteFavorite(dish.id)">
         </ion-delete-button>
       </ion-item>
     </ion-list>

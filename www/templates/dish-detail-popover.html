@@ -5,7 +5,7 @@
                   ng-click="addFavorite(dish.id)"
                   ng-if="!isFavorite(dish.id)">Add to Favorites</ion-item>
         <ion-item href="#" 
-                  ng-click="removeFavorite(dish.id)"
+                  ng-click="deleteFavorite(dish.id)"
                   ng-if="isFavorite(dish.id)">Remove from Favorites</ion-item>
         <ion-item href="#"
                   ng-click="comment()">Add a Comment</ion-item>

@@ -295,7 +295,7 @@ angular.module('conFusion.controllers', [])
     });
   };
 
-  $scope.removeFavorite = function(id) {
+  $scope.deleteFavorite = function(id) {
     var confirmPopup = $ionicPopup.confirm({
       title: "Confirm Delete",
       template: "Are you sure you want to delete this item from your favorites ?",
@@ -311,7 +311,12 @@ angular.module('conFusion.controllers', [])
 
         // FIXME: Factore me out to avoid duplication (esp. the duration parameter)
         //        Better design would use event on add/remove favorite
-        $cordovaVibration.vibrate(100);
+        // ONLY wrapped in $ionicPlatform.ready() for conformance with the assignment requirements
+        // but this is subject to discussions.
+        // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/hX2UGci6EeW-3A75XHu5kw
+        $ionicPlatform.ready(function() {
+          $cordovaVibration.vibrate(100);
+        });
       }
     });
     $ionicListDelegate.closeOptionButtons();
@@ -537,7 +542,7 @@ angular.module('conFusion.controllers', [])
     });
   };
 
-  $scope.removeFavorite = function(id) {
+  $scope.deleteFavorite = function(id) {
     $scope.closePopover();
 
     var confirmPopup = $ionicPopup.confirm({
@@ -555,7 +560,12 @@ angular.module('conFusion.controllers', [])
 
         // FIXME: Factore me out to avoid duplication (esp. the duration parameter)
         //        Better design would use event on add/remove favorite
-        $cordovaVibration.vibrate(100);
+        // ONLY wrapped in $ionicPlatform.ready() for conformance with the assignment requirements
+        // but this is subject to discussions.
+        // See https://www.coursera.org/learn/hybrid-mobile-development/discussions/hX2UGci6EeW-3A75XHu5kw
+        $ionicPlatform.ready(function() {
+          $cordovaVibration.vibrate(100);
+        });
       }
     });
     $ionicListDelegate.closeOptionButtons();
@@ -619,6 +629,7 @@ angular.module('conFusion.controllers', [])
 
 .controller('IndexController', ['leader', 'dish', 'promotion', 'baseURL', '$scope',
   function(leader, dish, promotion, baseURL, $scope) {
+    console.log("Index controller entered");
 
     $scope.baseURL = baseURL;
     

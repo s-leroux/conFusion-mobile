@@ -10,7 +10,7 @@
 
 <div class="card">
     <div class="item item-body item-text-wrap">
-        <img ng-src="{{baseURL+dish.image}}"
+        <img ng-src="{{urlResolver(dish.image)}}"
              alt="{{dish.name}}"
              class="full-image">
         <h2>{{dish.name}}

@@ -58,6 +58,7 @@ angular.module('conFusion.services',['ngResource'])
     }])
 
     .factory('leaderFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+        //return { getByRole : function(k) {console.log("getByRole "+k);}};
         return $resource(baseURL+'leadership', null, {
             // extra methods
             getByRole: { method: 'GET',

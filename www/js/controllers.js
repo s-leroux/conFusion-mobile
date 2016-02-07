@@ -1,7 +1,9 @@
 angular.module('conFusion.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $localStorage, 
+.controller('AppCtrl', function(baseURL, $scope, $ionicModal, $timeout, $localStorage, 
               $ionicPlatform, $cordovaCamera, $cordovaImagePicker) {
+
+  console.log("Start of AppCtrl");
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -171,7 +173,11 @@ angular.module('conFusion.controllers', [])
   };
 
   $scope.urlResolver = function(url) {
-    return 'http://localhost:3000/' + url
+    if (typeof url === "undefined") {
+      return "";
+    }
+    
+    return baseURL + url;
   }
 })
 
@@ -204,7 +210,7 @@ angular.module('conFusion.controllers', [])
 
   $scope.tab = 0;
   $scope.filtText = '';
-  $scope.message = "Loading...";
+  $scope.message = '';
 
   $scope.dishes = [];
   $scope.showMenu = false;
@@ -435,7 +441,7 @@ angular.module('conFusion.controllers', [])
 
   $scope.dish = dish;
   $scope.showDish = false;
-  $scope.message = "Loading...";
+  $scope.message = '';
 
   $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
     scope: $scope
@@ -629,7 +635,8 @@ angular.module('conFusion.controllers', [])
 
 .controller('IndexController', ['leader', 'dish', 'promotion', 'baseURL', '$scope', '$location',
   function(leader, dish, promotion, baseURL, $scope, $location) {
-    console.log("Index controller entered");
+  
+  console.log("Start of IndexController");
 
     $scope.baseURL = baseURL;
     
@@ -645,6 +652,7 @@ angular.module('conFusion.controllers', [])
       $location.path( path );
     };
   }
+
 ])
 
 
@@ -656,7 +664,7 @@ angular.module('conFusion.controllers', [])
 
     $scope.leaders = leaders;
     $scope.showLeaders = false;
-    $scope.message = "Loading...";
+    $scope.message = '';
   }
 ])
 

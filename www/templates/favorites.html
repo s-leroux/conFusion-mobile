@@ -14,7 +14,7 @@
                     class="item-thumbnail-left"
                     on-swipe-left="deleteFavorite(dish.id)">
 
-        <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
+        <img ng-src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
         <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
           <span class="ion-ios-star icon" aria-label="favorite">
           </span>

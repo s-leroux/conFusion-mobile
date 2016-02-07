@@ -30,7 +30,7 @@
   <ul>
     <li class="item item-avatar item-text-wrap" ng-repeat="leader in leaders"
       class="item-thumbnail-left">
-      <img src="{{baseURL + leader.image}}" alt="{{leader.name}}">
+      <img ng-src="{{urlResolver(leader.image)}}" alt="{{leader.name}}">
       <h2>{{leader.name}}</h2>
       <h3>{{leader.designation}}</h3>
       <p>{{leader.description}}</p>

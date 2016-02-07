@@ -13,10 +13,10 @@
     {{message}}
     <ion-list>
       <ion-item ng-repeat="dish in dishes | filter:{category: filtText}" 
-                    href="#/app/menu/{{dish.id}}"
+                    ng-href="#/app/menu/{{dish.id}}"
                     class="item-thumbnail-left">
 
-        <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
+        <img ng-src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
         <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">
           <span class="ion-ios-star icon" aria-label="favorite">
           </span>

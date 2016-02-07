@@ -7,7 +7,7 @@
     </div>
     <div class="item item-thumbnail-left item-text-wrap"
                            ng-click="go('/app/menu/'+dish.id)">
-        <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
+        <img ng-src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
         <h2>{{dish.name}}
         <span class="badge">{{dish.price | currency}}</span>
         </h2>
@@ -21,7 +21,7 @@
     </div>
     <div class="item item-thumbnail-right item-text-wrap"
                            ng-click="go('/app/menu')">
-        <img src="{{baseURL + promotion.image}}" alt="{{promotion.name}}">
+        <img ng-src="{{urlResolver(promotion.image)}}" alt="{{promotion.name}}">
         <h2>{{promotion.name}}</h2>
         <p>{{promotion.description}}</p>
     </div>
@@ -32,7 +32,7 @@
     </div>
     <div class="item item-thumbnail-left item-text-wrap"
                            ng-click="go('/app/aboutus')">
-        <img src="{{baseURL + leader.image}}" alt="{{dish.name}}">
+        <img ng-src="{{urlResolver(leader.image)}}" alt="{{dish.name}}">
         <h2>{{leader.name}}</h2>
         <h4>{{leader.designation}}</h4>
         <p>{{leader.description}}</p>

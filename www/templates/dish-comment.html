@@ -9,9 +9,8 @@
     <dic class="row">
     <div class="list card">
       <!-- Reminder of the dish we are commenting -->
-      <div class="item item-thumbnail-left"
-                           href="#/app/menu/{{dish.id}}">
-        <img src="{{baseURL + dish.image}}" alt="{{dish.name}}">
+      <div class="item item-thumbnail-left">
+        <img ng-src="{{urlResolver(dish.image)}}" alt="{{dish.name}}">
         <h2><br>{{dish.name}}
         <span style="font-size:75%">{{dish.price | currency}}</span>
         <span class="badge badge-assertive" ng-if="isFavorite(dish.id)">

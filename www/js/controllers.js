@@ -627,8 +627,8 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-.controller('IndexController', ['leader', 'dish', 'promotion', 'baseURL', '$scope',
-  function(leader, dish, promotion, baseURL, $scope) {
+.controller('IndexController', ['leader', 'dish', 'promotion', 'baseURL', '$scope', '$location',
+  function(leader, dish, promotion, baseURL, $scope, $location) {
     console.log("Index controller entered");
 
     $scope.baseURL = baseURL;
@@ -641,10 +641,9 @@ angular.module('conFusion.controllers', [])
       leader = data[0];
     });
 
-    console.log("leader");
-    console.log(leader);
-    console.log("dish");
-    console.log(dish);
+    $scope.go = function(path) {
+      $location.path( path );
+    };
   }
 ])
 

@@ -176,7 +176,7 @@ angular.module('conFusion.controllers', [])
     if (typeof url === "undefined") {
       return "";
     }
-    
+
     return baseURL + url;
   }
 })
@@ -356,7 +356,6 @@ angular.module('conFusion.controllers', [])
   $scope.shouldShowDelete = false;
   $scope.toggleDelete = function() {
     $scope.shouldShowDelete = !$scope.shouldShowDelete;
-    console.log(shouldShowDelete);
   };
 }])
 
@@ -574,7 +573,9 @@ angular.module('conFusion.controllers', [])
         });
       }
     });
-    $ionicListDelegate.closeOptionButtons();
+    if (typeof $ionicListDelegate != "undefined") {
+      $ionicListDelegate.closeOptionButtons();
+    }
   };
 
   $scope.isFavorite = function(id) {

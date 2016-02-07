@@ -70,10 +70,9 @@ angular.module('conFusion', ['ionic', 'ngCordova',
       StatusBar.styleDefault();
     }
 
-//    $timeout(function(){
-      console.log("Hide splashscreen");
+    if ($cordovaSplashscreen) {
       $cordovaSplashscreen.hide();
-//    },2000);
+    }
   });
 })
 

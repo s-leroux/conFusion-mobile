@@ -1,7 +1,9 @@
 angular.module('conFusion.controllers', [])
 
-.controller('AppCtrl', function(baseURL, $scope, $ionicModal, $timeout, $localStorage, 
-              $ionicPlatform, $cordovaCamera, $cordovaImagePicker) {
+.controller('AppCtrl', function(baseURL, $scope, $ionicModal, 
+              $timeout, $localStorage, 
+              $ionicPlatform, $cordovaCamera, $cordovaImagePicker,
+              $cordovaToast) {
 
   console.log("Start of AppCtrl");
 
@@ -38,6 +40,9 @@ angular.module('conFusion.controllers', [])
     console.log('Doing login', $scope.loginData);
 
     $localStorage.storeObject('userinfo', $scope.loginData);
+
+    $cordovaToast
+      .show('Logged in\n(always work for demo)', 'long', 'bottom');
     
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
@@ -68,11 +73,14 @@ angular.module('conFusion.controllers', [])
 
   // Perform the registration action when the user submits the registration form
   $scope.doRegister = function () {
-      console.log('Doing reservation', $scope.reservation);
+      console.log('Registering', $scope.registration);
 
       // Simulate a registration delay. Remove this and replace with your registration
       // code if using a registration system
       $timeout(function () {
+          $scope.loginData.username = $scope.registration.username;
+          $localStorage.storeObject('userinfo', $scope.loginData);
+
           $scope.closeRegister();
       }, 1000);
   };

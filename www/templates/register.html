@@ -6,7 +6,7 @@
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="doRegister()">
+    <form ng-submit="doRegister()" name="registrationForm">
       <div class="list">
        <label class="item item-input">
        <span class="input-label">Your Picture</span>
@@ -34,7 +34,7 @@
         </label>
          <label class="item item-input">
           <span class="input-label">Username</span>
-          <input type="text" ng-model="registration.username">
+          <input type="text" ng-model="registration.username" required>
         </label>
        <label class="item item-input">
           <span class="input-label">Telephone Number</span>
@@ -42,10 +42,11 @@
         </label>
        <label class="item item-input">
           <span class="input-label">Email</span>
-          <input type="email" ng-model="registration.email">
+          <input type="email" ng-model="registration.email" required>
         </label>
         <label class="item">
-          <button class="button button-block button-positive" type="submit">Register</button>
+          <button class="button button-block button-positive" type="submit"
+                  ng-disabled="registrationForm.$invalid">Register</button>
         </label>
       </div>
     </form>

@@ -99,7 +99,7 @@ angular.module('conFusion', ['ionic', 'ngCordova',
         controller: 'IndexController',
         resolve: {
           leader: ['leaderFactory', function(leaderFactory) {
-            return leaderFactory.getByRole({abbr: 'EC'});
+            return leaderFactory.getByRole({abbr: 'WD'});
           }],
           dish: ['menuFactory', function(menuFactory) {
             return menuFactory.get({id: 0});

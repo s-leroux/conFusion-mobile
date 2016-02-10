@@ -14,5 +14,8 @@ canonical project.
 Applications data are loaded from a [server on Heroku][1].  In order for the
 application to work properly, you need internet access on your android device.
 
+Source code is available on GitHub [s-leroux/conFusion-mobile][3]
+
 [1]: https://confusion-basic-sylvain-leroux.herokuapp.com/db 
 [2]: https://www.coursera.org/learn/hybrid-mobile-development/
+[3]: https://github.com/s-leroux/conFusion-mobile

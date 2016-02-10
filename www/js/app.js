@@ -120,7 +120,7 @@ angular.module('conFusion', ['ionic', 'ngCordova',
         controller: 'AboutController',
         resolve: {
           leaders: ['leaderFactory', function(leaderFactory) {
-            return leaderFactory.query();
+            return leaderFactory.query({_sort: "id"});
           }],
         },
       }
